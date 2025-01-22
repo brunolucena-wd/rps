@@ -1,5 +1,8 @@
 let choices = ["rock", "paper", "scissors"];
 
+let humanScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
     return choices[(Math.round(Math.random()*2))]
 }
@@ -9,22 +12,26 @@ function getHumanChoice() {
     return humanChoice;
 }
 
+const scoreShowcase = document.createElement("div");
+scoreShowcase.textContent = "Score";
+document.querySelector("body").appendChild(scoreShowcase);
+
 function playRound(humanChoice, computerChoice) {
-    console.log(`Computer chose ${computerChoice}`);
+    scoreShowcase.textContent = `Computer chose ${computerChoice}`;
     switch(humanChoice) {
         case "rock":
             switch(computerChoice) {
                 case "rock":
-                    console.log("That's a tie.")
+                    scoreShowcase.textContent = "That's a tie.";
                     break;
 
                 case "paper":
-                    console.log("You lost.");
+                    scoreShowcase.textContent = "You lost.";
                     computerScore++;
                     break;
 
                 case "scissors":
-                    console.log("You win!");
+                    scoreShowcase.textContent = "You win!";
                     humanScore++;
                     break;
             }
@@ -33,16 +40,16 @@ function playRound(humanChoice, computerChoice) {
         case "paper":
             switch(computerChoice) {
                 case "rock":
-                    console.log("You win!")
+                    scoreShowcase.textContent = "You win!";
                     humanScore++;
                     break;
 
                 case "paper":
-                    console.log("That's a tie.");
+                    scoreShowcase.textContent = "That's a tie.";
                     break;
 
                 case "scissors":
-                    console.log("You lost.");
+                    scoreShowcase.textContent = "You lost.";
                     computerScore++;
                     break;
             }
@@ -51,23 +58,32 @@ function playRound(humanChoice, computerChoice) {
         case "scissors":
             switch(computerChoice) {
                 case "rock":
-                    console.log("You lost.")
+                    scoreShowcase.textContent = "You lost.";
                     computerScore++;
                     break;
 
                 case "paper":
-                    console.log("You win!");
+                    scoreShowcase.textContent = "You win!";
                     humanScore++;
                     break;
 
                 case "scissors":
-                    console.log("That's a tie.");
+                    scoreShowcase.textContent = "That's a tie.";
                     break;
             }
             break;
 
         default:
-            console.log(`${humanChoice} is not a valid option.`);
+            scoreShowcase.textContent = `${humanChoice} is not a valid option.`;
+    }
+    if (humanScore < 5 && computerScore < 5) {
+        scoreShowcase.textContent += `Computer: ${computerScore} Human: ${humanScore}`;
+    } else if (humanScore == 5) {
+        scoreShowcase.textContent = "Human wins!";
+        return;
+    } else if (computerScore == 5) {
+        scoreShowcase.textContent = "Computer wins!";
+        return;
     }
 }
 
@@ -79,10 +95,14 @@ function playGame(rounds) {
     }
 }
 
-let humanScore = 0;
-let computerScore = 0;
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        playRound(button.textContent.toLowerCase(), getComputerChoice());
+    })
+})
 
-let rounds = prompt("How many rounds would you like to play?");
+// let rounds = prompt("How many rounds would you like to play?");
 
-playGame(rounds);
-console.log(`Computer: ${computerScore}\nHuman: ${humanScore}`);
+
+// scoreShowcase.textContent = `Computer: ${computerScore}\nHuman: ${humanScore}`;
